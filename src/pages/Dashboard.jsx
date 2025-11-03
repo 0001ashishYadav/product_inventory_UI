@@ -6,7 +6,7 @@ import {
   TrendingUp,
   TrendingDown,
 } from "lucide-react";
-import StatCard from "./StatCard";
+import StatCard from "../componenets/StatCard";
 import { productsList, recentEntriesList, recentExitsList } from "../data";
 
 const Dashboard = () => {

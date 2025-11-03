@@ -1,6 +1,6 @@
 import { Eye, Edit, Trash2, Package, Loader, Box } from "lucide-react";
 import { productsList } from "../data";
-import ManageInventory from "./ManageInventory";
+import ManageInventory from "../componenets/ManageInventory";
 import { useState } from "react";
 import { useEffect } from "react";
 import { apiClient } from "../utils/apiClient";

@@ -3,18 +3,24 @@ import { useEffect } from "react";
 import { useState } from "react";
 
 import { apiClient } from "../utils/apiClient";
+import Pagination from "../componenets/Pagination";
 
 const Entries = () => {
   const [allEnteries, setAllEnteries] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(2);
+  const [limit, setLimit] = useState(7);
+
+  const [totalPages, setTotalPages] = useState();
 
   useEffect(() => {
     const fetchAllEnteries = async () => {
       setIsLoading(true);
       try {
-        const enteriesResponse = await apiClient.getAllEntries();
-        console.log(enteriesResponse.enteries);
-        setAllEnteries(enteriesResponse.enteries);
+        const enteriesResponse = await apiClient.getAllEntries(page, limit);
+        console.log(enteriesResponse);
+        setAllEnteries(enteriesResponse.data);
+        setTotalPages(enteriesResponse.pagination.totalPages);
 
         setIsLoading(false);
       } catch (error) {
@@ -23,7 +29,7 @@ const Entries = () => {
     };
 
     fetchAllEnteries();
-  }, []);
+  }, [page, limit]);
   return (
     <>
       {isLoading ? (
@@ -104,6 +110,12 @@ const Entries = () => {
               </tbody>
             </table>
           </div>
+
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
         </div>
       )}
     </>

@@ -10,11 +10,11 @@ import {
   Box,
 } from "lucide-react";
 import { useState } from "react";
-import NoProduct from "./NoProduct";
+import NoProduct from "../componenets/NoProduct";
 import { useEffect } from "react";
 import { apiClient } from "../utils/apiClient";
 import { Link } from "react-router";
-import SmDevicePcard from "./smDevicePcard";
+import SmDevicePcard from "../componenets/smDevicePcard";
 
 const ProductsView = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -120,7 +120,7 @@ const ProductsView = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {products.map((product) => (
+                    {products?.map((product) => (
                       <tr
                         key={product.id}
                         className="hover:bg-gray-50 transition-colors"

@@ -2,25 +2,32 @@ import { Box, Package } from "lucide-react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { apiClient } from "../utils/apiClient";
+import Pagination from "../componenets/Pagination";
 
 const Exits = () => {
   const [allExits, setAllExits] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(7);
+
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchAllExits = async () => {
       setIsLoading(true);
       try {
-        const exitsResponse = await apiClient.getAllExits();
-        console.log(exitsResponse.exits);
-        setAllExits(exitsResponse.exits);
+        const exitsResponse = await apiClient.getAllExits(page, limit);
+        console.log(exitsResponse);
+        setAllExits(exitsResponse.data);
+        setTotalPages(exitsResponse.pagination.totalPages);
+
         setIsLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
     fetchAllExits();
-  }, []);
+  }, [page, limit]);
 
   return (
     <>
@@ -102,6 +109,12 @@ const Exits = () => {
               </tbody>
             </table>
           </div>
+
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
         </div>
       )}
     </>

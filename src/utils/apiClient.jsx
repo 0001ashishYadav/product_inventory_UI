@@ -57,6 +57,10 @@ apiClient.getProducts = () => apiClient("/manageStock/getProducts", "GET");
 apiClient.getAllInventory = () =>
   apiClient("/manageStock/getAllInventory", "GET");
 
+apiClient.getAllEntries = () => apiClient("/manageStock/getAllEntries", "GET");
+
+apiClient.getAllExits = () => apiClient("/manageStock/getAllExits", "GET");
+
 apiClient.addProduct = (payload) =>
   apiClient("/manageStock/addProduct", "POST", payload);
 

@@ -4,7 +4,7 @@ const NoProduct = () => {
   return (
     <>
       <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 pt-10">
-        <div className="max-w-6xl mx-auto">
+        <div className="mx-auto">
           {/* Floating Background Elements */}
           <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
           <div className="absolute top-40 right-10 w-72 h-72 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
@@ -21,12 +21,11 @@ const NoProduct = () => {
                 </div>
               </div>
 
-              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4">
-                No Products Yet
+              <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
+                Check your internet connection !
               </h1>
               <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-                Start building your inventory by adding your first product. It
-                only takes a few seconds!
+                Network related issue, can't reach database server, try again.
               </p>
 
               {/* CTA Buttons */}

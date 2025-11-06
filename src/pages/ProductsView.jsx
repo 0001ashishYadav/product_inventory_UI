@@ -93,7 +93,7 @@ const ProductsView = () => {
             </div>
           </div>
 
-          {products.length === 0 ? (
+          {!products || products.length === 0 ? (
             <NoProduct />
           ) : (
             <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">

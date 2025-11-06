@@ -7,10 +7,14 @@ import {
   Activity,
   Inbox,
   MinusSquare,
+  MenuIcon,
+  Cross,
+  X,
 } from "lucide-react";
 
 const MainLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isPhoneNavbarOpen, setIsPhoneNavbarOpen] = useState(false);
 
   const location = useLocation();
   const pathName = location.pathname.split("/")[1]; // e.g., '/products' → 'products'
@@ -37,7 +41,7 @@ const MainLayout = ({ children }) => {
   }, []);
   return (
     <>
-      <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
+      <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 relative">
         {/* Sidebar */}
 
         {isSidebarOpen && (
@@ -85,6 +89,112 @@ const MainLayout = ({ children }) => {
               </nav>
             </div>
           </div>
+        )}
+
+        {/* phone nav bar */}
+
+        {!isSidebarOpen && (
+          <>
+            <div className="w-full bg-white shadow-md relative z-20">
+              <div className="flex justify-between items-center px-4 py-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-linear-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                    <Package className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h1 className="text-xl font-bold text-gray-900">
+                      InvenTrack
+                    </h1>
+                    <p className="text-xs text-gray-500">Management System</p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setIsPhoneNavbarOpen(!isPhoneNavbarOpen)}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  {isPhoneNavbarOpen ? (
+                    <X className="w-6 h-6 text-gray-700" />
+                  ) : (
+                    <MenuIcon className="w-6 h-6 text-gray-700" />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Mobile Menu Overlay */}
+            <div
+              className={`fixed inset-0 bg-black transition-opacity duration-300 z-40 ${
+                isPhoneNavbarOpen
+                  ? "opacity-50 pointer-events-auto"
+                  : "opacity-0 pointer-events-none"
+              }`}
+              onClick={() => setIsPhoneNavbarOpen(false)}
+            />
+
+            {/* Mobile Menu */}
+            <div
+              className={`fixed top-0 left-0 right-0 bg-white shadow-xl z-50 transform transition-transform duration-500 ease-out ${
+                isPhoneNavbarOpen ? "translate-y-0" : "-translate-y-full"
+              }`}
+            >
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-8">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-linear-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                      <Package className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h1 className="text-xl font-bold text-gray-900">
+                        InvenTrack
+                      </h1>
+                      <p className="text-xs text-gray-500">Management System</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsPhoneNavbarOpen(false)}
+                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    {isPhoneNavbarOpen ? (
+                      <X className="w-6 h-6 text-gray-700" />
+                    ) : (
+                      <MenuIcon className="w-6 h-6 text-gray-700" />
+                    )}
+                  </button>
+                </div>
+
+                <nav className="space-y-2">
+                  {[
+                    { id: "dashboard", label: "Dashboard", icon: Activity },
+                    { id: "products", label: "Products", icon: Package },
+                    { id: "inventory", label: "Inventory", icon: Box },
+                    { id: "users", label: "Users", icon: Users },
+                    { id: "entries", label: "Entries", icon: Inbox },
+                    { id: "exits", label: "Exits", icon: MinusSquare },
+                  ].map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <NavLink
+                        key={item.id}
+                        to={`/${item.id}`}
+                        onClick={() => setIsPhoneNavbarOpen(false)}
+                        className={({ isActive }) =>
+                          `w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                            isActive
+                              ? "bg-blue-50 text-blue-600 font-semibold"
+                              : "text-gray-600 hover:bg-gray-50"
+                          }`
+                        }
+                      >
+                        <Icon className="w-5 h-5" />
+                        {item.label}
+                      </NavLink>
+                    );
+                  })}
+                </nav>
+              </div>
+            </div>
+          </>
         )}
 
         {/* Main Content */}

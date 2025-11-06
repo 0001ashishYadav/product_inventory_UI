@@ -6,6 +6,7 @@ const GlobalContext = createContext({});
 
 export const GlobalContextProvider = ({ children }) => {
   const [userProfile, setUserProfile] = useState(null);
+  const [isSmallDevice, setIsSmallDevice] = useState(false);
 
   const [isLogin, setIsLogin] = useState(() => {
     const access_token = getCookie("token");
@@ -16,6 +17,25 @@ export const GlobalContextProvider = ({ children }) => {
 
     return true;
   });
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setIsSmallDevice(false);
+      } else {
+        setIsSmallDevice(true);
+      }
+    };
+
+    // Run on initial render
+    handleResize();
+
+    // Add event listener
+    window.addEventListener("resize", handleResize);
+
+    // Clean up on unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const checkLogin = () => {
@@ -38,6 +58,8 @@ export const GlobalContextProvider = ({ children }) => {
     setIsLogin,
     userProfile,
     setUserProfile,
+    isSmallDevice,
+    setIsSmallDevice,
   };
   return (
     <GlobalContext.Provider value={value}>

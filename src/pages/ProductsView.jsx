@@ -81,84 +81,13 @@ const ProductsView = () => {
 
           {!products || products.length === 0 ? (
             <NoProduct />
-          ) : isSmallDevice ? (
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
-              <div className="overflow-x-auto">
-                {products.map((p) => (
-                  <div
-                    key={p.id}
-                    className="bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl mb-4"
-                  >
-                    {/* Header with gradient */}
-                    <div className="bg-linear-to-r from-blue-500 to-purple-600 p-6 relative overflow-hidden">
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16"></div>
-                      <div className="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-10 rounded-full -ml-12 -mb-12"></div>
-
-                      <div className="relative flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
-                            <Package className="w-8 h-8 text-white" />
-                          </div>
-                          <div>
-                            <h3 className="text-white text-[10px] font-light opacity-60">
-                              Product
-                            </h3>
-                            <p className="text-white text-[12px] font-bold">
-                              {p.name}
-                            </p>
-                          </div>
-                        </div>
-
-                        {/* Stock Badge */}
-                        <button
-                          className={`px-2 py-1 rounded-full grid gap-4 font-semibold transition-all duration-300 ml-5 text-white`}
-                        >
-                          <Edit className="h-4" />
-                          <Trash2 className="h-4" />
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Card Body */}
-                    <div className="p-6 space-y-4">
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                          <span className="text-gray-500 font-medium">SKU</span>
-                          <span className="text-gray-900 font-semibold">
-                            {p.skuId}
-                          </span>
-                        </div>
-
-                        <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                          <span className="text-gray-500 font-medium">
-                            Category
-                          </span>
-                          <span className="text-gray-900 font-semibold">
-                            {p.category}
-                          </span>
-                        </div>
-
-                        <div className="flex items-center justify-between py-3">
-                          <span className="text-gray-500 font-medium">
-                            Min Quantity
-                          </span>
-                          <span className="text-gray-900 font-semibold">
-                            {p.minQuantity}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
           ) : (
             <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead className="bg-gray-50 border-b border-gray-200">
                     <tr>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                      <th className="px-6 md:px-2 py-4 md:py-1 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         Product
                       </th>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">

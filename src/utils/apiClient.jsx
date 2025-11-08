@@ -1,6 +1,6 @@
 import { getCookie } from "./cookies";
 
-const baseURL = "http://localhost:5000";
+const baseURL = "http://192.168.1.235:5000";
 
 export const apiClient = async (url, method, body = null, tokenName = "") => {
   const accessToken = getCookie("token");
@@ -15,27 +15,29 @@ export const apiClient = async (url, method, body = null, tokenName = "") => {
     defaultHeaders["Authorization"] = `Bearer ${accessToken}`;
   }
 
-  let config;
+  const config = {
+    method,
+    headers: defaultHeaders,
+    ...(body && { body: JSON.stringify(body) }),
+  };
 
-  if (!body || body === null) {
-    config = {
-      method: method,
-      headers: {
-        ...defaultHeaders,
-      },
-    };
-  } else {
-    config = {
-      method: method,
-      headers: {
-        ...defaultHeaders,
-      },
-      body: JSON.stringify(body),
-    };
+  try {
+    const response = await fetch(`${baseURL}${url}`, config);
+
+    // 🔴 Check for HTTP errors
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw {
+        status: response.status,
+        message: errorData.message || "Something went wrong",
+      };
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("API Error:", error);
+    throw error; // rethrow so frontend can handle it
   }
-
-  const response = await fetch(`${baseURL}${url}`, config);
-  return await response.json();
 };
 
 // user authentication ...............................

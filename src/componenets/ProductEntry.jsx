@@ -14,6 +14,8 @@ const ProductEntry = ({ userId, productId, productName }) => {
     notes: "",
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -23,13 +25,14 @@ const ProductEntry = ({ userId, productId, productName }) => {
   };
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     const payload = {
       ...formData,
       type: "entry",
     };
 
     try {
-      await apiClient.productEntry(payload);
+      const data = await apiClient.productEntry(payload);
 
       setFormData({
         productName: "",
@@ -38,9 +41,15 @@ const ProductEntry = ({ userId, productId, productName }) => {
         notes: "",
       });
 
+      if (data.error) console.log(data.error);
+
       //   onClose();
     } catch (error) {
-      console.error(error);
+      setIsLoading(false);
+      console.log(error);
+      alert(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -144,7 +153,11 @@ const ProductEntry = ({ userId, productId, productName }) => {
           onClick={handleSubmit}
           className="flex-1 px-6 py-3 rounded-xl font-medium text-white transition-all duration-200 shadow-lg bg-linear-to-r from-green-600 to-emerald-600 hover:shadow-green-500/50 hover:scale-[1.02]"
         >
-          Add to Inventory
+          {isLoading ? (
+            <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-600 border-t-transparent"></div>
+          ) : (
+            "Add to Inventory"
+          )}
         </button>
       </div>
     </div>

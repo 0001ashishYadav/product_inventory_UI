@@ -16,6 +16,8 @@ const ProductExit = ({ userId, productId, productName }) => {
 
   console.log(formData);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -25,6 +27,7 @@ const ProductExit = ({ userId, productId, productName }) => {
   };
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     const payload = {
       ...formData,
       type: "exit",
@@ -42,7 +45,10 @@ const ProductExit = ({ userId, productId, productName }) => {
 
       //   onClose();
     } catch (error) {
-      console.error(error);
+      console.log(error);
+      alert(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -146,7 +152,11 @@ const ProductExit = ({ userId, productId, productName }) => {
           onClick={handleSubmit}
           className="flex-1 px-6 py-3 rounded-xl font-medium text-white transition-all duration-200 shadow-lg bg-linear-to-r from-red-600 to-rose-600 hover:shadow-red-500/50 hover:scale-[1.02]"
         >
-          Remove from Inventory
+          {isLoading ? (
+            <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-600 border-t-transparent"></div>
+          ) : (
+            "Remove from Inventory"
+          )}
         </button>
       </div>
     </div>

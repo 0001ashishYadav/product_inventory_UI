@@ -19,9 +19,6 @@ import {
 import { usersDataList } from "../data";
 
 const User = () => {
-  const [activeView, setActiveView] = useState("grid");
-  const [selectedUser, setSelectedUser] = useState(null);
-
   const users = usersDataList;
 
   const getRoleBadgeColor = (role) => {
@@ -39,16 +36,9 @@ const User = () => {
     return UserCheck;
   };
 
-  const getBadgeIcon = (badge) => {
-    if (badge === "premium") return Crown;
-    if (badge === "pro") return Star;
-    return null;
-  };
-
   const UserCardGrid = ({ user }) => {
     const [showMenu, setShowMenu] = useState(false);
     const RoleIcon = getRoleIcon(user.role);
-    const BadgeIcon = getBadgeIcon(user.badge);
 
     return (
       <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 group">
@@ -63,16 +53,6 @@ const User = () => {
           } relative`}
         >
           <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity"></div>
-
-          {/* Badge */}
-          {user.badge && (
-            <div className="absolute top-3 left-3 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full flex items-center gap-1">
-              {BadgeIcon && <BadgeIcon className="w-3 h-3 text-white" />}
-              <span className="text-xs font-semibold text-white capitalize">
-                {user.badge}
-              </span>
-            </div>
-          )}
 
           {/* Menu */}
           <div className="absolute top-3 right-3">
@@ -137,14 +117,7 @@ const User = () => {
               <Mail className="w-4 h-4 shrink-0" />
               <span className="truncate">{user.email}</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <Phone className="w-4 h-4 shrink-0" />
-              <span>{user.phone}</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <MapPin className="w-4 h-4 shrink-0" />
-              <span>{user.location}</span>
-            </div>
+
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <Calendar className="w-4 h-4 shrink-0" />
               <span>Joined {user.joinDate}</span>

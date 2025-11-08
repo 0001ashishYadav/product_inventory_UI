@@ -81,12 +81,12 @@ const AddProduct = () => {
         description: "",
         skuId: "",
       });
-
       setTimeout(() => {
         setShowSuccess(false);
       }, 1000);
     } catch (error) {
       console.log(error);
+      alert(error.message);
     }
   };
 

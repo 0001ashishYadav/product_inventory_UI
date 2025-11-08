@@ -22,9 +22,6 @@ const Exits = () => {
 
   const [totalPages, setTotalPages] = useState(1);
 
-  const [fData, setFdata] = useState();
-  console.log("fData", fData);
-
   const [filterType, setFilterType] = useState("all"); // all, week, month, date-range
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");

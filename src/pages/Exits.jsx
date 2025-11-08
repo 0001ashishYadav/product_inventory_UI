@@ -1,5 +1,13 @@
-import { Box, Edit, Package, Trash2 } from "lucide-react";
-import { useEffect } from "react";
+import {
+  Box,
+  Calendar,
+  Download,
+  Edit,
+  Filter,
+  Package,
+  Trash2,
+} from "lucide-react";
+import { useEffect, useMemo } from "react";
 import { useState } from "react";
 import { apiClient } from "../utils/apiClient";
 import Pagination from "../componenets/Pagination";
@@ -16,6 +24,103 @@ const Exits = () => {
 
   const [fData, setFdata] = useState();
   console.log("fData", fData);
+
+  const [filterType, setFilterType] = useState("all"); // all, week, month, date-range
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  // Filter entries based on selected filter
+  const filteredEntries = useMemo(() => {
+    const today = new Date();
+
+    switch (filterType) {
+      case "week": {
+        const weekAgo = new Date(today);
+        weekAgo.setDate(today.getDate() - 7);
+        return allExits.filter((entry) => new Date(entry.date) >= weekAgo);
+      }
+      case "month": {
+        const monthAgo = new Date(today);
+        monthAgo.setMonth(today.getMonth() - 1);
+        return allExits.filter((entry) => new Date(entry.date) >= monthAgo);
+      }
+      case "date-range": {
+        if (!startDate && !endDate) return allEnteries;
+
+        return allExits.filter((entry) => {
+          const entryDate = new Date(entry.date);
+          const start = startDate
+            ? new Date(startDate)
+            : new Date("1900-01-01");
+          const end = endDate ? new Date(endDate) : new Date("2100-12-31");
+
+          return entryDate >= start && entryDate <= end;
+        });
+      }
+      default:
+        return allExits;
+    }
+  }, [allExits, filterType, startDate, endDate]);
+
+  const downloadCSV = () => {
+    // Function to escape CSV fields properly
+    const escapeCSVField = (field) => {
+      if (field === null || field === undefined) return "";
+      const stringField = String(field);
+      // If field contains comma, newline, or quote, wrap in quotes and escape internal quotes
+      if (
+        stringField.includes(",") ||
+        stringField.includes("\n") ||
+        stringField.includes('"')
+      ) {
+        return `"${stringField.replace(/"/g, '""')}"`;
+      }
+      return stringField;
+    };
+
+    const headers = [
+      "Product",
+      "Removed By",
+      "Quantity",
+      "Price/Unit",
+      "Date",
+      "Reason",
+    ];
+
+    // Create CSV rows with proper escaping
+    const rows = allExits.map((entry) =>
+      [
+        escapeCSVField(entry.product.name),
+        escapeCSVField(entry.user.name),
+        escapeCSVField(entry.quantity),
+        escapeCSVField(entry.price),
+        escapeCSVField(entry.date),
+        escapeCSVField(entry.reason),
+      ].join(",")
+    );
+
+    // Combine headers and rows
+    const csvContent = [headers.join(","), ...rows].join("\n");
+
+    // Add BOM for proper Excel UTF-8 support
+    const BOM = "\uFEFF";
+    const blob = new Blob([BOM + csvContent], {
+      type: "text/csv;charset=utf-8;",
+    });
+
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute(
+      "download",
+      `inventory_entries_${new Date().toISOString().split("T")[0]}.csv`
+    );
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   useEffect(() => {
     const fetchAllExits = async () => {
@@ -51,7 +156,118 @@ const Exits = () => {
         <NoProduct />
       ) : (
         <>
-          <FilterAndDownloadCSV data={allExits} filteredData={setFdata} />
+          <div className="max-w-7xl mx-auto">
+            <div className="bg-white rounded-lg shadow-sm p-4 mb-4">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                {/* Filter Options */}
+                <div className="flex flex-wrap items-center gap-3">
+                  <div className="flex items-center gap-2 text-gray-700">
+                    <Filter size={18} />
+                    <span className="font-medium">Filter:</span>
+                  </div>
+
+                  <button
+                    onClick={() => setFilterType("all")}
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                      filterType === "all"
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    All
+                  </button>
+
+                  <button
+                    onClick={() => setFilterType("week")}
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                      filterType === "week"
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    Last Week
+                  </button>
+
+                  <button
+                    onClick={() => setFilterType("month")}
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                      filterType === "month"
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    Last Month
+                  </button>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setFilterType("date-range")}
+                      className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${
+                        filterType === "date-range"
+                          ? "bg-blue-500 text-white"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      }`}
+                    >
+                      <Calendar size={16} />
+                      Date Range
+                    </button>
+                    {filterType === "date-range" && (
+                      <div className="flex items-center gap-2">
+                        <div className="flex flex-col">
+                          <label className="text-xs text-gray-600 mb-1">
+                            From
+                          </label>
+                          <input
+                            type="date"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                            className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                          />
+                        </div>
+                        <div className="flex flex-col">
+                          <label className="text-xs text-gray-600 mb-1">
+                            To
+                          </label>
+                          <input
+                            type="date"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                            className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                          />
+                        </div>
+                        {(startDate || endDate) && (
+                          <button
+                            onClick={() => {
+                              setStartDate("");
+                              setEndDate("");
+                            }}
+                            className="mt-5 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          >
+                            Clear
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Export Button */}
+                <button
+                  onClick={downloadCSV}
+                  className="px-5 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors flex items-center gap-2 shadow-sm"
+                >
+                  <Download size={18} />
+                  <span className="text-sm"> CSV</span>
+                </button>
+              </div>
+
+              {/* Results Count */}
+              <div className="mt-3 text-sm text-gray-600">
+                Showing {filteredEntries.length} of {filteredEntries.length}{" "}
+                items
+              </div>
+            </div>
+          </div>
 
           <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
             <div className="overflow-x-auto -mx-4 sm:mx-0">
@@ -99,7 +315,7 @@ const Exits = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {fData?.map((product) => (
+                      {filteredEntries?.map((product) => (
                         <tr
                           key={product.id}
                           className="hover:bg-gray-50 transition-colors"

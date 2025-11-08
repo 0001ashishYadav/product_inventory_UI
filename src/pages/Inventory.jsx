@@ -249,7 +249,7 @@ const Inventory = () => {
                         >
                           <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 whitespace-nowrap">
                             <div className="flex items-center">
-                              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-2 sm:mr-3 shrink-0">
                                 <Package className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                               </div>
                               <span className="font-medium text-gray-900 text-xs sm:text-sm md:text-base">

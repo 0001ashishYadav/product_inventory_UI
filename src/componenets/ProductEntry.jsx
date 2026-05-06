@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { Plus } from "lucide-react";
 
-const ProductEntry = ({ userId, productId, productName }) => {
+const ProductEntry = ({ userId, productId, productName, onClose }) => {
   const [formData, setFormData] = useState({
     productName: productName,
     addedBy: userId,
@@ -43,7 +43,7 @@ const ProductEntry = ({ userId, productId, productName }) => {
 
       if (data.error) console.log(data.error);
 
-      //   onClose();
+      onClose();
     } catch (error) {
       setIsLoading(false);
       console.log(error);

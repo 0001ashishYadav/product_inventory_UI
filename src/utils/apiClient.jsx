@@ -1,6 +1,6 @@
 import { getCookie } from "./cookies";
 
-const baseURL = "http://192.168.1.235:5000";
+const baseURL = "http://192.168.1.240:5000";
 
 export const apiClient = async (url, method, body = null, tokenName = "") => {
   const accessToken = getCookie("token");
@@ -51,6 +51,8 @@ apiClient.resetPassword = (token, payload) =>
 
 apiClient.forgotPassword = (payload) =>
   apiClient("/users/forgotPassword", "PATCH", payload);
+
+apiClient.getAllUsers = () => apiClient("/users/getAllUsers", "GET");
 
 // Product APIs
 

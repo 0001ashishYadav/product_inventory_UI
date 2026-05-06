@@ -66,12 +66,14 @@ const ManageInventory = ({ onClose, userId, productId, productName }) => {
                 userId={userId}
                 productId={productId}
                 productName={productName}
+                onclose={onClose}
               />
             ) : (
               <ProductExit
                 userId={userId}
                 productId={productId}
                 productName={productName}
+                onClose={onClose}
               />
             )}
           </div>

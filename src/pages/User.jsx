@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Mail,
   Phone,
@@ -16,10 +16,29 @@ import {
   Shield,
   Crown,
 } from "lucide-react";
-import { usersDataList } from "../data";
+import { apiClient } from "../utils/apiClient";
 
 const User = () => {
-  const users = usersDataList;
+  // const users = usersDataList;
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState();
+
+  useEffect(() => {
+    const getAllUsers = async () => {
+      setIsLoading(true);
+      try {
+        const response = await apiClient.getAllUsers();
+        setUsers(response.allUsers);
+      } catch (error) {
+        console.error("Frontend caught error:", error);
+        alert(`Error ${error.status}: ${error.message}`);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getAllUsers();
+  }, []);
 
   const getRoleBadgeColor = (role) => {
     const colors = {
@@ -82,7 +101,7 @@ const User = () => {
         <div className="relative px-6 -mt-12 mb-4">
           <div className="relative inline-block">
             <img
-              src={user.avatar}
+              src="https://img.freepik.com/premium-vector/cute-boy-smiling-cartoon-kawaii-boy-illustration-boy-avatar-happy-kid_1001605-3445.jpg?semt=ais_hybrid&w=740&q=80"
               alt={user.name}
               className="w-24 h-24 rounded-2xl border-4 border-white shadow-lg bg-white"
             />
@@ -120,7 +139,7 @@ const User = () => {
 
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <Calendar className="w-4 h-4 shrink-0" />
-              <span>Joined {user.joinDate}</span>
+              <span>Joined {user.createdAt.split("T")[0]}</span>
             </div>
           </div>
 
@@ -128,20 +147,18 @@ const User = () => {
           <div className="grid grid-cols-3 gap-2 mb-4 pt-4 border-t border-gray-100">
             <div className="text-center">
               <div className="text-lg font-bold text-gray-900">
-                {user.stats.entries}
+                {user._count.entry}
               </div>
               <div className="text-xs text-gray-500">Entries</div>
             </div>
             <div className="text-center">
               <div className="text-lg font-bold text-gray-900">
-                {user.stats.exits}
+                {user._count.exit}
               </div>
               <div className="text-xs text-gray-500">Exits</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-bold text-gray-900">
-                {user.stats.products}
-              </div>
+              <div className="text-lg font-bold text-gray-900">0</div>
               <div className="text-xs text-gray-500">Products</div>
             </div>
           </div>

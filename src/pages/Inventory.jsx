@@ -8,13 +8,11 @@ import {
   Download,
   Filter,
 } from "lucide-react";
-import { productsList } from "../data";
 import ManageInventory from "../componenets/ManageInventory";
 import { useState } from "react";
 import { useEffect } from "react";
 import { apiClient } from "../utils/apiClient";
 import NoProduct from "../componenets/NoProduct";
-import { useGlobalContext } from "../context/globalContext";
 
 const Inventory = () => {
   const [allInventories, setAllInventories] = useState([]);
@@ -226,12 +224,12 @@ const Inventory = () => {
                         >
                           Status
                         </th>
-                        <th
+                        {/* <th
                           scope="col"
                           className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap"
                         >
                           Actions
-                        </th>
+                        </th> */}
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
@@ -245,7 +243,11 @@ const Inventory = () => {
                               product.product.name
                             )
                           }
-                          className="hover:bg-gray-50 transition-colors cursor-pointer"
+                          className={`hover:bg-gray-50 transition-colors cursor-pointer ${
+                            product.quantity <= product.product.minQuantity
+                              ? "bg-red-700/15"
+                              : "bg-green-700/15"
+                          }`}
                         >
                           <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 whitespace-nowrap">
                             <div className="flex items-center">
@@ -283,7 +285,7 @@ const Inventory = () => {
                               </span>
                             )}
                           </td>
-                          <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 whitespace-nowrap text-right">
+                          {/* <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 whitespace-nowrap text-right">
                             <div className="flex items-center justify-end gap-1 sm:gap-2">
                               <button
                                 className="p-1 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -310,7 +312,7 @@ const Inventory = () => {
                                 <Trash2 className="w-3 h-3 sm:w-4 sm:h-4 text-red-600" />
                               </button>
                             </div>
-                          </td>
+                          </td> */}
                         </tr>
                       ))}
                     </tbody>

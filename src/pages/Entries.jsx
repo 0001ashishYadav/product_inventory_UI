@@ -12,7 +12,6 @@ import { useState } from "react";
 
 import { apiClient } from "../utils/apiClient";
 import Pagination from "../componenets/Pagination";
-import FilterAndDownloadCSV from "../componenets/FilterAndDownloadCSV";
 import NoProduct from "../componenets/NoProduct";
 
 const Entries = () => {

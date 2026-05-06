@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { Minus } from "lucide-react";
 
-const ProductExit = ({ userId, productId, productName }) => {
+const ProductExit = ({ userId, productId, productName, onClose }) => {
   const [formData, setFormData] = useState({
     productName: productName,
     removedBy: userId,
@@ -43,7 +43,7 @@ const ProductExit = ({ userId, productId, productName }) => {
         reason: "",
       });
 
-      //   onClose();
+      onClose();
     } catch (error) {
       console.log(error);
       alert(error.message);

@@ -30,7 +30,7 @@ const MainLayout = ({ children }) => {
         {/* Mobile Overlay */}
         {isSmallDevice && isSidebarOpen && (
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-20"
+            className="fixed inset-0 bg-black/50 z-20"
             onClick={() => setIsSidebarOpen(false)}
           />
         )}
@@ -38,7 +38,7 @@ const MainLayout = ({ children }) => {
         {/* Sidebar */}
         {(isSidebarOpen || !isSmallDevice) && (
           <div
-            className={`fixed left-0 top-0 h-full w-64 bg-white shadow-lg border-r border-gray-200 transition-transform duration-300 ${
+            className={`fixed left-0 top-0 h-full w-64 bg-white shadow-lg border-r border-gray-200 transition-all duration-360 ${
               isSmallDevice
                 ? `z-30 ${
                     isSidebarOpen ? "translate-x-0" : "-translate-x-full"
